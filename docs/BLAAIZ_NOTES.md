@@ -104,8 +104,8 @@ This document records the exact findings from inspecting the official `blaaiz-no
 - Blaaiz transaction status values:
   `'PENDING' | 'PROCESSING' | 'SUCCESSFUL' | 'FAILED' | 'EXPIRED' | 'REVERSED' | 'CANCELLED' | 'AWAITING_APPROVAL'`
 
-### MAPPING TO WAYPAY UX:
-| Blaaiz Status | WayPay Internal Status | Plain-Language User Copy |
+### MAPPING TO PAYWIDE UX:
+| Blaaiz Status | PayWide Internal Status | Plain-Language User Copy |
 | :--- | :--- | :--- |
 | *(Internal initial)* | `CREATED` | Transfer created |
 | `PENDING` / `AWAITING_APPROVAL` | `AWAITING_FUNDS` | Waiting for your payment |
@@ -122,4 +122,4 @@ This document records the exact findings from inspecting the official `blaaiz-no
 
 1. **Rate Lock Duration:** Assumed to be 5 minutes (300 seconds). The UI displays a live 5-minute countdown clock and gracefully requests a refresh when the timer reaches zero.
 2. **Sandbox Pre-funded Wallet vs Virtual Account:** In sandbox mode, the sender virtual account funding step is simulated with an explicit "Simulate Bank Transfer Payment" trigger in the UI, transitioning the state from `AWAITING_FUNDS` to `PROCESSING`.
-3. **Idempotency Header:** While Blaaiz accepts `merchant_reference` on payouts, WayPay passes client-generated UUID idempotency keys to guarantee duplicate submits are rejected at the route handler and database level.
+3. **Idempotency Header:** While Blaaiz accepts `merchant_reference` on payouts, PayWide passes client-generated UUID idempotency keys to guarantee duplicate submits are rejected at the route handler and database level.

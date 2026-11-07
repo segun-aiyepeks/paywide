@@ -16,7 +16,7 @@ const montserrat = Montserrat({
 });
 
 export const metadata: Metadata = {
-  title: "WayPay — Institutional Cross-Border Remittance via Blaaiz RaaS",
+  title: "PayWide — Institutional Cross-Border Remittance via Blaaiz RaaS",
   description:
     "Zero-float, transparent cross-border money transfer from NGN to USD, GBP, EUR, and CAD. Powered by the Blaaiz Remittance-as-a-Service API.",
 };

@@ -1,7 +1,7 @@
-# WayPay UX & Design Specification
+# PayWide UX & Design Specification
 
 > **Hackathon:** Blaaiz Buildathon (GDG Ilorin)  
-> **Product Name:** WayPay  
+> **Product Name:** PayWide  
 > **Design Philosophy:** Precision Capital Modern — Institutional trust, total fee transparency, and real-time status observability.
 
 ---
@@ -10,11 +10,11 @@
 
 Most retail remittance applications conceal foreign exchange markups inside widened spreads and obscure payment statuses behind opaque "Pending" labels.
 
-**WayPay’s product wedge is Total Transparency:**
+**PayWide’s product wedge is Total Transparency:**
 1. **Upfront Clarity:** Senders see the exact guaranteed exchange rate, network fee, and recipient payout *before* providing personal details or committing funds.
 2. **Deterministic Precision:** All financial calculations strictly utilize integer minor units (kobo, pence, cents) to prevent IEEE-754 floating point inaccuracies.
 3. **Live Status Observability:** Instead of a static "processing" spinner, senders observe an active 4-phase status timeline driven by Server-Sent Events (SSE) and HMAC-verified Blaaiz webhooks.
-4. **Unambiguous Regulatory Demarcation:** WayPay clearly identifies itself as a technology provider, making explicit that fund custody, foreign exchange, and destination clearing are powered by **Blaaiz (Remittance-as-a-Service)**.
+4. **Unambiguous Regulatory Demarcation:** PayWide clearly identifies itself as a technology provider, making explicit that fund custody, foreign exchange, and destination clearing are powered by **Blaaiz (Remittance-as-a-Service)**.
 
 ---
 
@@ -105,7 +105,7 @@ Form fields change dynamically depending on the selected currency, enforcing sta
   - Sender full name and email for automated digital receipt dispatch.
   - Regulatory transfer purpose (e.g., *Family Support*, *Overseas Education*, *Technology Services*).
 - **Mandatory Regulatory Consent Checkbox:**
-  > *"I acknowledge that WayPay is a technology software platform and not a bank. Payment fulfillment, currency exchange, and cross-border settlement are executed exclusively via Blaaiz Remittance-as-a-Service."*
+  > *"I acknowledge that PayWide is a technology software platform and not a bank. Payment fulfillment, currency exchange, and cross-border settlement are executed exclusively via Blaaiz Remittance-as-a-Service."*
 - **Idempotency Protection:** A unique idempotency key (`wp_idem_<timestamp>_<random>`) is bound to the submission button, preventing accidental double-billing if tapped multiple times.
 
 ---
@@ -140,7 +140,7 @@ Form fields change dynamically depending on the selected currency, enforcing sta
 
 ## 5. Developer & Judge Observability: The Integration Inspector
 
-To provide absolute transparency during hackathon evaluation, WayPay includes an embedded **Integration Inspector**:
+To provide absolute transparency during hackathon evaluation, PayWide includes an embedded **Integration Inspector**:
 - Accessible from the persistent header banner.
 - Displays every server-side call made to Blaaiz: HTTP method, endpoint, mode (`LIVE` vs `MOCK`), HTTP status code, latency in milliseconds, and raw JSON request/response payloads.
 - Sensitive credentials (API keys, client secrets, bearer tokens) are scrubbed before reaching the browser.

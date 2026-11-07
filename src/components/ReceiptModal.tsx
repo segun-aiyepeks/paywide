@@ -55,7 +55,7 @@ export function ReceiptModal({ transfer, isOpen, onClose }: ReceiptModalProps) {
                 <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-white font-bold">
                   <ArrowRightLeft className="w-4 h-4" />
                 </div>
-                <span className="font-heading text-xl font-bold text-primary">WayPay</span>
+                <span className="font-heading text-xl font-bold text-primary">PayWide</span>
               </div>
               <p className="text-[11px] text-on-surface-variant">
                 Remittance-as-a-Service Rails by Blaaiz
@@ -134,7 +134,7 @@ export function ReceiptModal({ transfer, isOpen, onClose }: ReceiptModalProps) {
           {/* Compliance & Regulatory footer */}
           <div className="pt-4 border-t border-outline-variant/40 text-[10px] text-on-surface-variant/80 text-center leading-relaxed">
             <p>
-              WayPay is a software technology interface. Banking, remittance, foreign exchange conversion, and destination settlement are fulfilled under license by Blaaiz and partner depository banks.
+              PayWide is a software technology interface. Banking, remittance, foreign exchange conversion, and destination settlement are fulfilled under license by Blaaiz and partner depository banks.
             </p>
             <p className="mt-1 font-mono text-slate-400">
               Digitally sealed • Non-repudiable audit trail

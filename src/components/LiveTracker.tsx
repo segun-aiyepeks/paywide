@@ -341,7 +341,7 @@ export function LiveTracker({ transferId, onOpenReceipt, onStartNew }: LiveTrack
 
             <div className="bg-surface-container-lowest p-3 rounded border border-outline-variant/40">
               <span className="text-[10px] text-on-surface-variant block uppercase">Account Name</span>
-              <span className="font-bold text-on-surface">WayPay / Blaaiz Escrow</span>
+              <span className="font-bold text-on-surface">PayWide / Blaaiz Escrow</span>
             </div>
 
             <div className="bg-surface-container-lowest p-3 rounded border border-outline-variant/40 flex items-center justify-between">
@@ -406,7 +406,7 @@ export function LiveTracker({ transferId, onOpenReceipt, onStartNew }: LiveTrack
       {/* Transaction Identifiers Box */}
       <div className="bg-surface-container-low rounded-lg p-4 font-mono text-xs border border-outline-variant/40 space-y-2 mb-6">
         <div className="flex items-center justify-between">
-          <span className="text-on-surface-variant">WayPay Reference:</span>
+          <span className="text-on-surface-variant">PayWide Reference:</span>
           <span className="font-semibold text-on-surface flex items-center gap-1.5">
             {transfer.reference}
             <button

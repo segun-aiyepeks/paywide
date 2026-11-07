@@ -4,7 +4,7 @@
  * transition validation, and plain-language microcopy.
  */
 
-export type WayPayStatus =
+export type PayWideStatus =
   | "CREATED"
   | "AWAITING_FUNDS"
   | "PROCESSING"
@@ -13,7 +13,8 @@ export type WayPayStatus =
   | "EXPIRED"
   | "CANCELLED";
 
-export type TransferStatus = WayPayStatus;
+export type WayPayStatus = PayWideStatus;
+export type TransferStatus = PayWideStatus;
 
 export type BlaaizStatus =
   | "PENDING"
@@ -86,7 +87,7 @@ export const STATUS_META: Record<WayPayStatus, StatusMeta> = {
 };
 
 /**
- * Maps any raw Blaaiz transaction status to the WayPay domain status.
+ * Maps any raw Blaaiz transaction status to the PayWide domain status.
  */
 export function mapBlaaizStatusToTransferStatus(
   blaaizStatus: BlaaizStatus | string,

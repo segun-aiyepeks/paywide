@@ -247,7 +247,7 @@ export function ReviewConfirm({ quote, recipient, onBack, onSuccess }: ReviewCon
               className="mt-0.5 rounded border-outline-variant text-primary focus:ring-primary"
             />
             <span className="text-xs text-on-surface-variant leading-relaxed">
-              I acknowledge that <strong>WayPay</strong> is a technology software platform and not a bank.
+              I acknowledge that <strong>PayWide</strong> is a technology software platform and not a bank.
               Payment fulfillment, currency exchange, and cross-border settlement are executed exclusively via <strong>Blaaiz Remittance-as-a-Service</strong>. I confirm the beneficiary account details provided are accurate.
             </span>
           </label>

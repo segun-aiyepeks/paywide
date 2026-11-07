@@ -2,7 +2,7 @@ import React from "react";
 import { TrackerClient } from "./TrackerClient";
 
 export const metadata = {
-  title: "Transfer Tracking — WayPay",
+  title: "Transfer Tracking — PayWide",
   description: "Real-time live status tracking for cross-border remittance via Blaaiz RaaS.",
 };
 

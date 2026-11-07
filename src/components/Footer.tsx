@@ -17,7 +17,7 @@ export function Footer() {
                 Regulatory Disclosure &amp; Banking Rails
               </h4>
               <p className="text-on-surface-variant leading-relaxed text-xs">
-                <strong>WayPay is a financial technology software interface and is NOT a bank, licensed deposit institution, or foreign exchange dealer.</strong> Remittance-as-a-Service, cross-border payouts, foreign exchange conversions, and fund custody are provided exclusively by <strong>Blaaiz</strong> (api-dev.blaaiz.com / blaaiz.com) and its regulated partner financial institutions. WayPay never holds customer funds directly.
+                <strong>PayWide is a financial technology software interface and is NOT a bank, licensed deposit institution, or foreign exchange dealer.</strong> Remittance-as-a-Service, cross-border payouts, foreign exchange conversions, and fund custody are provided exclusively by <strong>Blaaiz</strong> (api-dev.blaaiz.com / blaaiz.com) and its regulated partner financial institutions. PayWide never holds customer funds directly.
               </p>
             </div>
           </div>
@@ -26,7 +26,7 @@ export function Footer() {
         {/* Links & Details Grid */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8 pb-8 border-b border-outline-variant/30">
           <div>
-            <div className="font-heading font-bold text-base text-primary mb-2">WayPay</div>
+            <div className="font-heading font-bold text-base text-primary mb-2">PayWide</div>
             <p className="text-xs text-on-surface-variant leading-relaxed">
               Institutional-grade cross-border remittance engineered for total transparency, deterministic integer arithmetic, and live status observability.
             </p>
@@ -109,7 +109,7 @@ export function Footer() {
         {/* Bottom row */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-on-surface-variant/80">
           <div>
-            &copy; {new Date().getFullYear()} WayPay. Built for Blaaiz Buildathon.
+            &copy; {new Date().getFullYear()} PayWide. Built for Blaaiz Buildathon.
           </div>
           <div className="flex items-center gap-4">
             <span>Server-side Blaaiz Node.js SDK v1.7.0</span>

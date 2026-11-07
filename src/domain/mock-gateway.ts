@@ -153,7 +153,7 @@ export class MockBlaaizGateway implements BlaaizGateway {
     const customer: CustomerResult = {
       ...data,
       id: `blz_cust_${crypto.randomBytes(6).toString("hex")}`,
-      business_id: "biz_waypay_demo_01",
+      business_id: "biz_paywide_demo_01",
       verification_status: "VERIFIED",
     };
     this.recordCall("POST", "/api/external/customer", data, customer);
@@ -168,7 +168,7 @@ export class MockBlaaizGateway implements BlaaizGateway {
 
     const tx: TransactionResult = {
       id: txId,
-      business_id: "biz_waypay_demo_01",
+      business_id: "biz_paywide_demo_01",
       business_customer_id: data.customer_id,
       business_wallet_id: data.wallet_id,
       status: "PROCESSING",
@@ -206,7 +206,7 @@ export class MockBlaaizGateway implements BlaaizGateway {
       // Generate deterministic simulated response if not found
       tx = {
         id: transactionId,
-        business_id: "biz_waypay_demo_01",
+        business_id: "biz_paywide_demo_01",
         business_customer_id: "blz_cust_mock",
         business_wallet_id: "wal_ngn_mock",
         status: "SUCCESSFUL",
@@ -235,7 +235,7 @@ export class MockBlaaizGateway implements BlaaizGateway {
     const vba: VirtualBankAccountResult = {
       id: `vba_${crypto.randomBytes(6).toString("hex")}`,
       account_number: randomAcc,
-      account_name: params.account_name || "WayPay / Sandbox Settlement Account",
+      account_name: params.account_name || "PayWide / Sandbox Settlement Account",
       bank_name: "Wema Bank (Simulated Blaaiz Rails)",
       bank_code: "035",
       wallet_id: params.wallet_id,

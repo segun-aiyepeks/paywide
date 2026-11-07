@@ -13,7 +13,7 @@ const initiatePayoutSchema = z.object({
   amount: z.number().positive("Amount must be positive"),
   purpose: z.string().min(2, "Purpose of transfer is required"),
   sender_name: z.string().default("Demo Sender"),
-  sender_email: z.string().email().default("demo.sender@waypay.example"),
+  sender_email: z.string().email().default("demo.sender@paywide.example"),
   recipient: universalRecipientSchema,
 });
 
@@ -157,7 +157,7 @@ export async function POST(req: NextRequest) {
     // 5. Generate virtual bank account for NGN funding step
     const vba = await gateway.createVirtualBankAccount({
       wallet_id: "wal_ngn_primary",
-      account_name: `WayPay / ${sender_name}`,
+      account_name: `PayWide / ${sender_name}`,
     });
 
     // 6. Save Recipient

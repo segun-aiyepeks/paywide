@@ -33,7 +33,7 @@ export async function POST(req: NextRequest) {
     });
 
     const corridor = CORRIDORS[to_currency as SupportedCorridor];
-    const waypayFee = 0; // WayPay service fee is 0 in demo mode
+    const paywideFee = 0; // PayWide service fee is 0 in demo mode
     const totalToPay = breakdown.you_send;
     const recipientGets = breakdown.recipient_gets;
     const rate = breakdown.exchange_rate;
@@ -48,7 +48,7 @@ export async function POST(req: NextRequest) {
         to_currency,
         you_send: amount,
         blaaiz_fee: breakdown.total_fees,
-        waypay_fee: waypayFee,
+        paywide_fee: paywideFee,
         total_to_pay: totalToPay,
         exchange_rate: rate,
         recipient_gets: recipientGets,

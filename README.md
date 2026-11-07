@@ -1,4 +1,4 @@
-# WayPay — Institutional Cross-Border Remittance on Blaaiz RaaS
+# PayWide — Institutional Cross-Border Remittance on Blaaiz RaaS
 
 > **Hackathon Submission:** Blaaiz Buildathon (GDG Ilorin)  
 > **Evaluation Deadline:** Saturday, 7 Nov 2026, 12:00 PM WAT  
@@ -7,23 +7,23 @@
 ---
 
 ## 3-Sentence Submission Summary
-WayPay is a cross-border money transfer platform built on the Blaaiz Remittance-as-a-Service API that solves hidden foreign exchange markups and opaque settlement delays through complete upfront transparency. Senders from Nigeria (NGN) receive a guaranteed 5-minute locked exchange rate, zero hidden fees, and exact recipient payout calculations in USD, GBP, EUR, and CAD before paying a single kobo. The entire settlement lifecycle is observed in real-time through an event-driven status timeline powered by Server-Sent Events (SSE), HMAC-SHA256 verified Blaaiz webhooks, and deterministic zero-float integer math.
+PayWide is a cross-border money transfer platform built on the Blaaiz Remittance-as-a-Service API that solves hidden foreign exchange markups and opaque settlement delays through complete upfront transparency. Senders from Nigeria (NGN) receive a guaranteed 5-minute locked exchange rate, zero hidden fees, and exact recipient payout calculations in USD, GBP, EUR, and CAD before paying a single kobo. The entire settlement lifecycle is observed in real-time through an event-driven status timeline powered by Server-Sent Events (SSE), HMAC-SHA256 verified Blaaiz webhooks, and deterministic zero-float integer math.
 
 ---
 
 ## Regulatory Disclosure & Banking Demarcation
-> **IMPORTANT:** WayPay is a financial technology software interface and is **NOT** a bank, deposit-taking institution, or licensed money transmitter. Cross-border remittance rails, currency conversion, liquidity routing, virtual funding accounts, and destination clearing are provided exclusively by **Blaaiz** (`https://api-dev.blaaiz.com` / `https://blaaiz.com`) and its licensed banking partner network. WayPay never holds customer funds directly.
+> **IMPORTANT:** PayWide is a financial technology software interface and is **NOT** a bank, deposit-taking institution, or licensed money transmitter. Cross-border remittance rails, currency conversion, liquidity routing, virtual funding accounts, and destination clearing are provided exclusively by **Blaaiz** (`https://api-dev.blaaiz.com` / `https://blaaiz.com`) and its licensed banking partner network. PayWide never holds customer funds directly.
 
 ---
 
-## The Problem & The WayPay Wedge
+## The Problem & The PayWide Wedge
 
 Traditional retail remittance from Africa suffers from three systemic flaws:
 1. **Hidden FX Markups:** Providers advertise "Zero Fees" while quietly inflating foreign exchange spreads by 3–8%, concealing the true cost of transfer from senders.
 2. **Opaque Settlement "Black Holes":** Once funds leave the sender's account, status tracking degrades into a static "Pending" label for hours or days with no intermediate feedback.
 3. **Floating-Point Imprecision:** Poorly engineered payment systems accumulate IEEE-754 rounding errors across conversions, resulting in discrepancies between quoted and delivered amounts.
 
-### The WayPay Wedge: Total Transparency
+### The PayWide Wedge: Total Transparency
 - **Upfront Guaranteed Cost:** The sender sees the live interbank rate, exact Blaaiz network fee, and precise recipient payout *before* entering sensitive personal data.
 - **5-Minute Rate Lock:** Senders are protected against volatile market fluctuations during checkout with a 300-second guaranteed rate countdown.
 - **Deterministic Zero-Float Math:** All financial arithmetic is executed strictly in integer minor units (kobo, cents, pence) via BigInt and scaled integer operations.
@@ -134,8 +134,8 @@ In strict accordance with hackathon guidelines, every integration point is hones
 ### Installation & Database Setup
 ```bash
 # Clone the repository
-git clone https://github.com/your-username/waypay.git
-cd waypay
+git clone https://github.com/your-username/paywide.git
+cd paywide
 
 # Install dependencies (including local blaaiz-nodejs-sdk vendor)
 npm install
@@ -158,7 +158,7 @@ cp .env.example .env
 | `BLAAIZ_CLIENT_ID` | OAuth Client ID from Blaaiz dashboard | *(Optional in mock)* |
 | `BLAAIZ_CLIENT_SECRET` | OAuth Client Secret from Blaaiz dashboard | *(Optional in mock)* |
 | `BLAAIZ_API_KEY` | API Key for Blaaiz services | *(Optional in mock)* |
-| `BLAAIZ_WEBHOOK_SECRET` | Secret key for verifying HMAC-SHA256 signatures | `whsec_waypay_sandbox_test_2026` |
+| `BLAAIZ_WEBHOOK_SECRET` | Secret key for verifying HMAC-SHA256 signatures | `whsec_paywide_sandbox_test_2026` |
 | `DATABASE_URL` | SQLite database file location | `"file:./dev.db"` |
 
 ### Running Tests

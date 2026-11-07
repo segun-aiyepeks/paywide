@@ -20,7 +20,7 @@ export function Header({ onOpenInspector }: HeaderProps) {
           <div>
             <div className="flex items-center gap-2">
               <span className="font-heading text-xl font-bold tracking-tight text-primary">
-                WayPay
+                PayWide
               </span>
               <span className="text-[10px] font-mono uppercase tracking-wider font-semibold px-2 py-0.5 rounded bg-secondary/10 text-secondary border border-secondary/20">
                 Blaaiz RaaS

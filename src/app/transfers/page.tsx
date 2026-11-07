@@ -2,7 +2,7 @@ import React from "react";
 import { TransfersList } from "../../components/TransfersList";
 
 export const metadata = {
-  title: "Transfer Activity — WayPay",
+  title: "Transfer Activity — PayWide",
   description: "View and track cross-border remittance transactions executed via the Blaaiz RaaS gateway.",
 };
 
