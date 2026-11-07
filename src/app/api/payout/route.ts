@@ -2,18 +2,32 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { getBlaaizGateway } from "@/domain";
-import { toMinorUnits, toMajorUnits } from "@/domain/money";
+import { toMinorUnits } from "@/domain/money";
 import { universalRecipientSchema } from "@/domain/corridors";
 import { STATUS_META, WayPayStatus } from "@/domain/status";
 
 const initiatePayoutSchema = z.object({
-  idempotency_key: z.string().min(8, "Idempotency key is required"),
-  from_currency: z.literal("NGN").default("NGN"),
-  to_currency: z.enum(["USD", "GBP", "EUR", "CAD"]),
-  amount: z.number().positive("Amount must be positive"),
-  purpose: z.string().min(2, "Purpose of transfer is required"),
-  sender_name: z.string().default("Demo Sender"),
-  sender_email: z.string().email().default("demo.sender@paywide.example"),
+  idempotency_key: z.string().optional(),
+  idempotencyKey: z.string().optional(),
+  from_currency: z.string().optional(),
+  sourceCurrency: z.string().optional(),
+  to_currency: z.string().optional(),
+  targetCurrency: z.string().optional(),
+  amount: z.union([z.number(), z.string()]).optional(),
+  amountMajor: z.union([z.number(), z.string()]).optional(),
+  sourceAmountMinor: z.union([z.number(), z.string()]).optional(),
+  targetAmountMinor: z.union([z.number(), z.string()]).optional(),
+  feeMinor: z.union([z.number(), z.string()]).optional(),
+  purpose: z.string().optional(),
+  narration: z.string().optional(),
+  sender_name: z.string().optional(),
+  sender_email: z.string().optional(),
+  sender: z
+    .object({
+      name: z.string().optional(),
+      email: z.string().optional(),
+    })
+    .optional(),
   recipient: universalRecipientSchema,
 });
 
@@ -29,16 +43,40 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const {
-      idempotency_key,
-      from_currency,
-      to_currency,
-      amount,
-      purpose,
-      sender_name,
-      sender_email,
-      recipient,
-    } = parsed.data;
+    const idempotency_key =
+      parsed.data.idempotency_key ||
+      parsed.data.idempotencyKey ||
+      `idem_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
+
+    const from_currency = (
+      parsed.data.from_currency ||
+      parsed.data.sourceCurrency ||
+      "NGN"
+    ).toUpperCase();
+
+    const to_currency = (
+      parsed.data.to_currency ||
+      parsed.data.targetCurrency ||
+      parsed.data.recipient.currency ||
+      "USD"
+    ).toUpperCase();
+
+    const sender_name =
+      parsed.data.sender?.name ||
+      parsed.data.sender_name ||
+      "Tunde Adeleke";
+
+    const sender_email =
+      parsed.data.sender?.email ||
+      parsed.data.sender_email ||
+      "tunde.adeleke@example.com";
+
+    const purpose =
+      parsed.data.purpose ||
+      parsed.data.narration ||
+      "Family Support / Maintenance";
+
+    const recipient = parsed.data.recipient;
 
     // Idempotency check: Return existing transfer if idempotency key was already processed
     const existing = await prisma.transfer.findUnique({
@@ -52,15 +90,32 @@ export async function POST(req: NextRequest) {
         idempotent_replay: true,
         transfer: {
           ...existing,
+          reference: `WP-${existing.id.slice(-8).toUpperCase()}`,
+          sourceAmountMinor: existing.amountMinor.toString(),
+          targetAmountMinor: existing.recipientGetsMinor.toString(),
           amountMinor: existing.amountMinor.toString(),
           feeMinor: existing.feeMinor.toString(),
           recipientGetsMinor: existing.recipientGetsMinor.toString(),
+          sourceCurrency: existing.fromCurrency,
+          targetCurrency: existing.toCurrency,
+          virtualAccount: existing.fundingAccountNumber,
+          blaaizPayoutId: existing.blaaizTransactionId,
           statusMeta: STATUS_META[existing.status as WayPayStatus],
         },
       });
     }
 
     const gateway = getBlaaizGateway();
+
+    // Determine amount in major units
+    let amount = 1000000;
+    if (parsed.data.amount) {
+      amount = Number(parsed.data.amount);
+    } else if (parsed.data.amountMajor) {
+      amount = Number(parsed.data.amountMajor);
+    } else if (parsed.data.sourceAmountMinor) {
+      amount = Number(parsed.data.sourceAmountMinor) / 100;
+    }
 
     // 1. Ensure user and customer records exist
     let user = await prisma.user.findUnique({
@@ -81,21 +136,21 @@ export async function POST(req: NextRequest) {
     let customer = user.customers[0];
     if (!customer) {
       const blzCustomer = await gateway.createCustomer({
-        first_name: sender_name.split(" ")[0] || "Ada",
-        last_name: sender_name.split(" ")[1] || "Okonkwo",
+        first_name: sender_name.split(" ")[0] || "Tunde",
+        last_name: sender_name.split(" ")[1] || "Adeleke",
         email: sender_email,
         type: "individual",
-        country: "NGA",
-        id_type: "drivers_license",
-        id_number: "DL-90812347",
+        country: "NG",
+        id_type: "passport",
+        id_number: "A12345678",
       });
 
       customer = await prisma.customer.create({
         data: {
           userId: user.id,
           blaaizCustomerId: blzCustomer.id,
-          idType: "drivers_license",
-          idNumber: "DL-90812347",
+          idType: "passport",
+          idNumber: "A12345678",
           verificationStatus: blzCustomer.verification_status,
         },
       });
@@ -109,7 +164,7 @@ export async function POST(req: NextRequest) {
     });
 
     const amountMinor = toMinorUnits(amount, from_currency);
-    const feeMinor = toMinorUnits(feeBreakdown.total_fees, from_currency);
+    const feeMinor = toMinorUnits(feeBreakdown.total_fees || 1500, from_currency);
     const recipientGetsMinor = toMinorUnits(feeBreakdown.recipient_gets, to_currency);
 
     // 3. Prepare corridor payout request payload for Blaaiz
@@ -218,15 +273,24 @@ export async function POST(req: NextRequest) {
       },
     });
 
+    const responseTransfer = {
+      ...transfer,
+      reference: `WP-${transfer.id.slice(-8).toUpperCase()}`,
+      sourceAmountMinor: transfer.amountMinor.toString(),
+      targetAmountMinor: transfer.recipientGetsMinor.toString(),
+      amountMinor: transfer.amountMinor.toString(),
+      feeMinor: transfer.feeMinor.toString(),
+      recipientGetsMinor: transfer.recipientGetsMinor.toString(),
+      sourceCurrency: transfer.fromCurrency,
+      targetCurrency: transfer.toCurrency,
+      virtualAccount: transfer.fundingAccountNumber,
+      blaaizPayoutId: transfer.blaaizTransactionId,
+      statusMeta: STATUS_META[transfer.status as WayPayStatus],
+    };
+
     return NextResponse.json({
       success: true,
-      transfer: {
-        ...transfer,
-        amountMinor: transfer.amountMinor.toString(),
-        feeMinor: transfer.feeMinor.toString(),
-        recipientGetsMinor: transfer.recipientGetsMinor.toString(),
-        statusMeta: STATUS_META[transfer.status as WayPayStatus],
-      },
+      transfer: responseTransfer,
     });
   } catch (error: any) {
     return NextResponse.json(

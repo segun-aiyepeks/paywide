@@ -3,6 +3,24 @@ import { prisma } from "@/lib/prisma";
 import { getBlaaizGateway } from "@/domain";
 import { mapBlaaizStatusToTransferStatus, STATUS_META, WayPayStatus } from "@/domain/status";
 
+function formatTransferResponse(t: any) {
+  return {
+    ...t,
+    reference: `WP-${t.id.slice(-8).toUpperCase()}`,
+    sourceAmountMinor: t.amountMinor.toString(),
+    targetAmountMinor: t.recipientGetsMinor.toString(),
+    amountMinor: t.amountMinor.toString(),
+    feeMinor: t.feeMinor.toString(),
+    recipientGetsMinor: t.recipientGetsMinor.toString(),
+    sourceCurrency: t.fromCurrency,
+    targetCurrency: t.toCurrency,
+    virtualAccount: t.fundingAccountNumber,
+    blaaizPayoutId: t.blaaizTransactionId,
+    recipientName: t.recipient?.name || "Authorized Recipient",
+    statusMeta: STATUS_META[t.status as WayPayStatus],
+  };
+}
+
 export async function GET(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -61,13 +79,7 @@ export async function GET(
 
             return NextResponse.json({
               success: true,
-              transfer: {
-                ...updated,
-                amountMinor: updated.amountMinor.toString(),
-                feeMinor: updated.feeMinor.toString(),
-                recipientGetsMinor: updated.recipientGetsMinor.toString(),
-                statusMeta: STATUS_META[updated.status as WayPayStatus],
-              },
+              transfer: formatTransferResponse(updated),
             });
           }
         }
@@ -79,13 +91,7 @@ export async function GET(
 
     return NextResponse.json({
       success: true,
-      transfer: {
-        ...transfer,
-        amountMinor: transfer.amountMinor.toString(),
-        feeMinor: transfer.feeMinor.toString(),
-        recipientGetsMinor: transfer.recipientGetsMinor.toString(),
-        statusMeta: STATUS_META[transfer.status as WayPayStatus],
-      },
+      transfer: formatTransferResponse(transfer),
     });
   } catch (error: any) {
     return NextResponse.json(

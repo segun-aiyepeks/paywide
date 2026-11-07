@@ -37,9 +37,15 @@ export async function GET(req: NextRequest) {
 
     const formatted = transfers.map((tx) => ({
       ...tx,
+      reference: `WP-${tx.id.slice(-8).toUpperCase()}`,
+      sourceAmountMinor: tx.amountMinor.toString(),
+      targetAmountMinor: tx.recipientGetsMinor.toString(),
       amountMinor: tx.amountMinor.toString(),
       feeMinor: tx.feeMinor.toString(),
       recipientGetsMinor: tx.recipientGetsMinor.toString(),
+      sourceCurrency: tx.fromCurrency,
+      targetCurrency: tx.toCurrency,
+      recipientName: tx.recipient?.name || "Recipient",
       statusMeta: STATUS_META[tx.status as WayPayStatus] || {
         status: tx.status,
         label: tx.status,

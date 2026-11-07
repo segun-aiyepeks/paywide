@@ -6,11 +6,19 @@ let gatewayInstance: BlaaizGateway | null = null;
 
 export function getBlaaizGateway(): BlaaizGateway {
   if (!gatewayInstance) {
-    const isMock = process.env.USE_MOCK !== "false";
-    if (isMock) {
-      gatewayInstance = new MockBlaaizGateway();
-    } else {
+    const clientId = process.env.BLAAIZ_CLIENT_ID?.trim();
+    const clientSecret = process.env.BLAAIZ_CLIENT_SECRET?.trim();
+    const apiKey = process.env.BLAAIZ_API_KEY?.trim();
+    const hasCredentials = Boolean((clientId && clientSecret) || apiKey);
+
+    // If live credentials are provided, default to live gateway
+    const forceMock = process.env.USE_MOCK === "force_mock";
+    const isLiveRequested = process.env.USE_MOCK === "false" || hasCredentials;
+
+    if (isLiveRequested && hasCredentials && !forceMock) {
       gatewayInstance = new RealBlaaizGateway();
+    } else {
+      gatewayInstance = new MockBlaaizGateway();
     }
   }
   return gatewayInstance;

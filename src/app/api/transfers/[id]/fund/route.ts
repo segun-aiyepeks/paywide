@@ -48,9 +48,17 @@ export async function POST(
       success: true,
       transfer: {
         ...updated,
+        reference: `WP-${updated.id.slice(-8).toUpperCase()}`,
+        sourceAmountMinor: updated.amountMinor.toString(),
+        targetAmountMinor: updated.recipientGetsMinor.toString(),
         amountMinor: updated.amountMinor.toString(),
         feeMinor: updated.feeMinor.toString(),
         recipientGetsMinor: updated.recipientGetsMinor.toString(),
+        sourceCurrency: updated.fromCurrency,
+        targetCurrency: updated.toCurrency,
+        virtualAccount: updated.fundingAccountNumber,
+        blaaizPayoutId: updated.blaaizTransactionId,
+        recipientName: updated.recipient?.name || "Authorized Recipient",
         statusMeta: STATUS_META[updated.status as WayPayStatus],
       },
     });
