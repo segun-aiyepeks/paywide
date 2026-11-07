@@ -1,0 +1,27 @@
+services:
+  - type: web
+    name: paywide
+    runtime: node
+    plan: free
+    region: frankfurt
+    buildCommand: npm install && npx prisma generate && npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_VERSION
+        value: 20.18.0
+      - key: DATABASE_URL
+        value: "file:./dev.db"
+      - key: USE_MOCK
+        value: "false"
+      - key: BLAAIZ_API_URL
+        value: https://api-dev.blaaiz.com
+      - key: BLAAIZ_CLIENT_ID
+        sync: false
+      - key: BLAAIZ_CLIENT_SECRET
+        sync: false
+      - key: BLAAIZ_WEBHOOK_SECRET
+        value: whsec_paywide_sandbox_secret_key_2026
+      - key: NEXT_PUBLIC_APP_NAME
+        value: PayWide
+      - key: NEXT_PUBLIC_APP_URL
+        value: https://paywide.onrender.com
