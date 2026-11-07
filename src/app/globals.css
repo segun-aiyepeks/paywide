@@ -1,0 +1,48 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+@layer base {
+  :root {
+    --background: 250 100% 99%;
+    --foreground: 222 47% 13%;
+    --primary: 221 100% 22%;
+    --primary-container: 224 64% 33%;
+    --secondary: 161 100% 21%;
+    --secondary-container: 153 86% 74%;
+    --surface: 250 100% 99%;
+    --surface-container-lowest: 0 0% 100%;
+    --surface-container-low: 236 100% 98%;
+    --surface-container: 233 100% 96%;
+    --surface-container-high: 230 100% 94%;
+    --surface-container-highest: 227 94% 93%;
+    --outline: 234 5% 48%;
+    --outline-variant: 240 12% 80%;
+  }
+
+  body {
+    @apply bg-surface text-on-surface antialiased;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+
+  /* Tabular numbers for financial precision */
+  .tabular-nums {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+/* Custom scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(117, 118, 130, 0.25);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(117, 118, 130, 0.45);
+}

@@ -1,0 +1,116 @@
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id           String        @id @default(cuid())
+  email        String        @unique
+  name         String
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  customers    Customer[]
+  transfers    Transfer[]
+  recipients   Recipient[]
+}
+
+model Customer {
+  id                   String   @id @default(cuid())
+  userId               String
+  user                 User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  blaaizCustomerId     String   @unique
+  idType               String
+  idNumber             String
+  verificationStatus   String   @default("VERIFIED") // PENDING, PROCESSING, VERIFIED, REJECTED
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+}
+
+model Recipient {
+  id             String     @id @default(cuid())
+  userId         String?
+  user           User?      @relation(fields: [userId], references: [id], onDelete: SetNull)
+  name           String
+  email          String?
+  currency       String     // USD, GBP, EUR, CAD
+  method         String     // bank_transfer, ach, wire, interac
+  detailsJson    String     // JSON-serialized corridor fields (account_number, sort_code, iban, routing, etc.)
+  isSaved        Boolean    @default(true)
+  createdAt      DateTime   @default(now())
+  transfers      Transfer[]
+}
+
+model Quote {
+  id                  String     @id @default(cuid())
+  fromCurrency        String     @default("NGN")
+  toCurrency          String     // USD, GBP, EUR, CAD
+  youSendMinor        BigInt     // NGN in kobo (e.g. 500,000 NGN = 50,000,000 kobo)
+  recipientGetsMinor  BigInt     // Cents/pence
+  exchangeRate        Float      // e.g. 0.000625 or NGN per target unit
+  blaaizFeeMinor      BigInt     // in kobo
+  waypayFeeMinor      BigInt     @default(0) // in kobo (0 for demo)
+  totalToPayMinor     BigInt     // youSendMinor + blaaizFeeMinor + waypayFeeMinor
+  eta                 String     // e.g. "Instant - 15 minutes"
+  expiresAt           DateTime
+  createdAt           DateTime   @default(now())
+  transfers           Transfer[]
+}
+
+model Transfer {
+  id                  String          @id @default(cuid())
+  userId              String?
+  user                User?           @relation(fields: [userId], references: [id], onDelete: SetNull)
+  recipientId         String?
+  recipient           Recipient?      @relation(fields: [recipientId], references: [id], onDelete: SetNull)
+  quoteId             String?
+  quote               Quote?          @relation(fields: [quoteId], references: [id], onDelete: SetNull)
+  idempotencyKey      String          @unique
+  blaaizTransactionId String?         @unique
+  mode                String          @default("mock") // "live" | "mock"
+  status              String          @default("CREATED") // CREATED, AWAITING_FUNDS, PROCESSING, COMPLETED, FAILED, EXPIRED, CANCELLED
+  fromCurrency        String          @default("NGN")
+  toCurrency          String          // USD, GBP, EUR, CAD
+  payoutMethod        String          // bank_transfer, ach, wire, interac
+  amountMinor         BigInt          // sender amount in kobo
+  feeMinor            BigInt          // total fee in kobo
+  recipientGetsMinor  BigInt          // recipient payout amount in minor units
+  exchangeRate        Float
+  purpose             String?         // e.g. "Family Support", "Supplier Payment", "Tuition"
+  failureReason       String?
+  
+  // Virtual Bank Account for NGN Funding Step
+  fundingAccountName  String?
+  fundingAccountNumber String?
+  fundingBankName     String?
+  
+  createdAt           DateTime        @default(now())
+  updatedAt           DateTime        @updatedAt
+  events              TransferEvent[]
+}
+
+model TransferEvent {
+  id             String    @id @default(cuid())
+  transferId     String
+  transfer       Transfer  @relation(fields: [transferId], references: [id], onDelete: Cascade)
+  fromStatus     String?
+  toStatus       String
+  message        String
+  source         String    @default("system") // "system" | "webhook" | "polling" | "simulated"
+  rawPayloadJson String?
+  createdAt      DateTime  @default(now())
+}
+
+model WebhookEvent {
+  id             String    @id @default(cuid())
+  eventId        String    @unique
+  eventType      String
+  rawPayload     String
+  signature      String?
+  timestamp      String?
+  verified       Boolean   @default(false)
+  createdAt      DateTime  @default(now())
+}

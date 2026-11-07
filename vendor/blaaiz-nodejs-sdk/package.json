@@ -1,0 +1,78 @@
+{
+  "name": "blaaiz-nodejs-sdk",
+  "version": "1.7.0",
+  "description": "Official Node.js SDK for Blaaiz RaaS (Remittance as a Service) API",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "test:integration": "jest --testPathPattern=integration",
+    "lint": "eslint src/**/*.js",
+    "lint:fix": "eslint src/**/*.js --fix",
+    "audit": "npm audit --audit-level=moderate",
+    "docs": "jsdoc -d docs src/**/*.js",
+    "build": "npm run lint",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "blaaiz",
+    "payments",
+    "remittance",
+    "fintech",
+    "api",
+    "sdk",
+    "nodejs",
+    "payout",
+    "collection",
+    "raas",
+    "cryptocurrency",
+    "bank-transfer",
+    "interac",
+    "open-banking"
+  ],
+  "author": {
+    "name": "Blaaiz",
+    "email": "onboarding@blaaiz.com",
+    "url": "https://business.blaaiz.com"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Blaaiz/blaaiz-nodejs-sdk.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Blaaiz/blaaiz-nodejs-sdk/issues"
+  },
+  "homepage": "https://docs.business.blaaiz.com",
+  "engines": {
+    "node": ">=12.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^18.19.119",
+    "audit-ci": "^7.0.1",
+    "eslint": "^8.40.0",
+    "eslint-config-standard": "^17.0.0",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-n": "^15.7.0",
+    "eslint-plugin-promise": "^6.1.1",
+    "jest": "^30.5.2",
+    "jsdoc": "^4.0.2"
+  },
+  "overrides": {
+    "@istanbuljs/load-nyc-config": {
+      "js-yaml": "^4.3.2"
+    }
+  },
+  "files": [
+    "index.js",
+    "index.d.ts",
+    "src/",
+    "README.md",
+    "LICENSE"
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
+}
